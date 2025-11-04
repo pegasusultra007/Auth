@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,11 @@ SECRET_KEY = 'django-insecure-$p4xxulsyik0n(hj4jyw8i04)0dhgkyu^c***08f#6i74e3=%j
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+JWT_SECRET = config("JWT_SECRET")
+JWT_ALGORITHM = config("JWT_ALGORITHM", default="HS256")
+JWT_EXP_DELTA_SECONDS = config("JWT_EXP_DELTA_SECONDS", cast=int, default=3600)
 
 
 # Application definition
@@ -74,16 +80,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pegasus',
-        'USER': 'postgres',
-        'PASSWORD': 'senin@999',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default=5432, cast=int),
     }
 }
+
 
 
 # Password validation
